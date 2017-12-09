@@ -13,6 +13,7 @@ RUN apk --no-cache add curl ca-certificates tar && \
   install -d -m0755 -o caddy -g caddy ${CADDYPATH}/.caddy ${CADDYPATH}/public && \
   apk del --purge curl tar
 
+VOLUME ${CADDYPATH}/.caddy
 WORKDIR /caddy
 USER caddy
 
