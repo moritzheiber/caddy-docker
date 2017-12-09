@@ -1,0 +1,8 @@
+version: "2.3"
+services:
+  caddy:
+    image: caddy-docker
+    container_name: "caddy"
+    command: caddy -root public -port 80
+    ports:
+      - "80:80"

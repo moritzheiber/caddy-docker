@@ -1,9 +1,29 @@
 require 'spec_helper'
 
-describe 'gitea Docker container' do
+module Helpers
+  def compose
+    @compose ||= Docker::Compose.new
+  end
+end
+
+RSpec.configure do |c|
+  c.include Helpers
+  c.extend Helpers
+end
+
+describe 'caddy Docker container', :extend_helpers do
   set :os, family: :alpine
   set :backend, :docker
-  set :docker_image, 'caddy'
+  set :docker_container, 'caddy'
+
+  before(:all) do
+    compose.up('caddy', detached: true)
+  end
+
+  after(:all) do
+    compose.kill
+    compose.rm(force: true, volumes: true)
+  end
 
   describe user('caddy') do
     it { should exist }
@@ -17,8 +37,8 @@ describe 'gitea Docker container' do
   end
 
   describe 'the webserver' do
-    it 'should be running on port 2015' do
-      wait_for(port(2015)).to be_listening.with('tcp')
+    it 'should be running on port 80' do
+      wait_for(port(80)).to be_listening.with('tcp')
     end
   end
 end
