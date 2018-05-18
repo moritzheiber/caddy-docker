@@ -1,15 +1,15 @@
 FROM moritzheiber/alpine-base:latest
 
-ENV CADDY_VERSION="0.10.12" \
-  CADDY_CHECKSUM="e841db24f0712b6691f430800b6f9943f8472efbdaf8535d6ab48c3002d3e123" \
+ENV CADDY_VERSION="0.11.0" \
+  CADDY_CHECKSUM="93e77bdbaba0a2b39f9e1de653d17ab1939491f7727948ec65750b4996d07c18" \
   CADDY_HOME="/caddy"
 
 ENV CADDYPATH="${CADDY_HOME}/certificates"
 
 RUN apk --no-cache add curl ca-certificates tar libcap-ng-utils && \
-  curl -L https://github.com/mholt/caddy/releases/download/v${CADDY_VERSION}/caddy_v${CADDY_VERSION}_linux_amd64.tar.gz | tar xzf - -C /tmp caddy && \
-  echo "${CADDY_CHECKSUM}  /tmp/caddy" | sha256sum -c - && \
-  install -m0755 -o root -g root /tmp/caddy /usr/bin/caddy && \
+  curl -L https://github.com/mholt/caddy/releases/download/v${CADDY_VERSION}/caddy_v${CADDY_VERSION}_linux_amd64.tar.gz -o /tmp/caddy.tar.gz && \
+  echo "${CADDY_CHECKSUM}  /tmp/caddy.tar.gz" | sha256sum -c - && \
+  tar xzf /tmp/caddy.tar.gz -C /usr/bin caddy && \
   filecap /usr/bin/caddy net_bind_service && \
   addgroup -S caddy && \
   adduser -h ${CADDY_HOME} -s /bin/bash -SD caddy && \
