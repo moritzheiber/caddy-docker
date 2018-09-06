@@ -30,7 +30,7 @@ RUN apk --no-cache add ca-certificates libcap-ng-utils && \
   addgroup -S caddy && \
   adduser -h ${CADDY_HOME} -s /bin/bash -SD caddy && \
   install -d -m0755 -o caddy -g caddy ${CADDYPATH} ${CADDY_HOME}/public && \
-  apk --no-cache del --purge libcap-ng
+  apk --no-cache del --purge libcap-ng libcap-ng-utils
 
 EXPOSE 80 443 2015
 VOLUME ${CADDYPATH}
