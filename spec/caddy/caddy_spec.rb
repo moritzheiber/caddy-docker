@@ -26,18 +26,22 @@ describe 'caddy Docker container', :extend_helpers do
   end
 
   describe user('caddy') do
-    it { should exist }
-    it { should have_login_shell '/bin/bash' }
+    it { is_expected.to exist }
+    it { is_expected.to have_login_shell '/bin/bash' }
   end
 
   describe process('caddy') do
-    it { should be_running }
-    its(:user) { should eq 'caddy' }
-    its(:args) { should match(/public/) }
+    it { is_expected.to be_running }
+    its(:user) { is_expected.to eq 'caddy' }
+    its(:args) { is_expected.to match(/public/) }
+  end
+
+  describe command('caddy -plugins') do
+    its(:stdout) { is_expected.to match(/tls\.dns\.route53/) }
   end
 
   describe 'the webserver' do
-    it 'should be running on port 80' do
+    it 'is available at port 80' do
       wait_for(port(80)).to be_listening.with('tcp')
     end
   end
