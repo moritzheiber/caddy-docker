@@ -1,21 +1,18 @@
-FROM golang:1-alpine as builder
+FROM golang:1.12-alpine as builder
 LABEL maintainer="Moritz Heiber <hello@heiber.im>"
 
-ARG CADDY_VERSION="0.11.0"
+ARG CADDY_VERSION="v1.0.0"
+ARG GO111MODULE="on"
 
-WORKDIR /go/src
+ADD main.go /go/src/caddy-build/main.go
+WORKDIR /go/src/caddy-build
 
-RUN apk --no-cache add git && \
-  git clone --depth 1 --branch "v${CADDY_VERSION}" https://github.com/mholt/caddy.git github.com/mholt/caddy && \
-  go get -u github.com/caddyserver/builds && \
-  # Enable the Route53 DNS provider
-  sed -i '/imported)/a\\t_ "github.com/caddyserver/dnsproviders/route53"' github.com/mholt/caddy/caddy/caddymain/run.go && \
-  # Disable Telemetry
-  sed -i 's/EnableTelemetry\ =\ true/EnableTelemetry\ =\ false/g' github.com/mholt/caddy/caddy/caddymain/run.go
-
-WORKDIR /go/src/github.com/mholt/caddy/caddy
-RUN go get ./... && \
-  go run build.go goos=linux
+RUN apk --no-cache add git build-base && \
+  go mod init caddy && \
+  go get -v github.com/mholt/caddy@${CADDY_VERSION} && \
+  echo "Building ..." && \
+  echo "replace github.com/h2non/gock => gopkg.in/h2non/gock.v1 v1.0.14" >> go.mod && \
+  go build
 
 FROM moritzheiber/alpine-base:latest
 LABEL maintainer="Moritz Heiber <hello@heiber.im>"
@@ -23,7 +20,7 @@ LABEL maintainer="Moritz Heiber <hello@heiber.im>"
 ENV CADDY_HOME="/caddy" \
   CADDYPATH="${CADDY_HOME}/certificates"
 
-COPY --from=builder /go/src/github.com/mholt/caddy/caddy/caddy /usr/bin/
+COPY --from=builder /go/src/caddy-build/caddy /usr/bin/
 
 RUN apk --no-cache add ca-certificates libcap-ng-utils && \
   filecap /usr/bin/caddy net_bind_service && \
