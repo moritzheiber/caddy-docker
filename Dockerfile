@@ -1,7 +1,7 @@
 FROM golang:1.12-alpine as builder
 LABEL maintainer="Moritz Heiber <hello@heiber.im>"
 
-ARG CADDY_VERSION="v1.0.0"
+ARG CADDY_VERSION="v1.0.1"
 ARG GO111MODULE="on"
 
 ADD main.go /go/src/caddy-build/main.go
@@ -9,7 +9,7 @@ WORKDIR /go/src/caddy-build
 
 RUN apk --no-cache add git build-base && \
   go mod init caddy && \
-  go get -v github.com/mholt/caddy@${CADDY_VERSION} && \
+  go get -v github.com/caddyserver/caddy@${CADDY_VERSION} && \
   echo "Building ..." && \
   echo "replace github.com/h2non/gock => gopkg.in/h2non/gock.v1 v1.0.14" >> go.mod && \
   go build
