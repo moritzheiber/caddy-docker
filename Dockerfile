@@ -1,7 +1,7 @@
-FROM golang:1.12-alpine as builder
+FROM golang:1.12.8-alpine3.10 as builder
 LABEL maintainer="Moritz Heiber <hello@heiber.im>"
 
-ARG CADDY_VERSION="v1.0.1"
+ARG CADDY_VERSION="v1.0.3"
 ARG GO111MODULE="on"
 
 ADD main.go /go/src/caddy-build/main.go
