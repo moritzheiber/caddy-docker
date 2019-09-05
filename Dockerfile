@@ -1,4 +1,4 @@
-FROM golang:1.12.8-alpine3.10 as builder
+FROM golang:1.13.0-alpine3.10 as builder
 LABEL maintainer="Moritz Heiber <hello@heiber.im>"
 
 ARG CADDY_VERSION="v1.0.3"
