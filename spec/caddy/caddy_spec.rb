@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 module Helpers
@@ -38,6 +40,7 @@ describe 'caddy Docker container', :extend_helpers do
 
   describe command('caddy -plugins') do
     its(:stdout) { is_expected.to match(/tls\.dns\.route53/) }
+    its(:stdout) { is_expected.to match(/http\.webdav/) }
   end
 
   describe 'the webserver' do
