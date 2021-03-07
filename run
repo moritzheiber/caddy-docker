@@ -26,8 +26,8 @@ build() {
 }
 
 push() {
-  docker push "${CONTAINER}" "${REPOSITORY}/${CONTAINER}"
-  docker push "${CONTAINER}" "${REPOSITORY}/${IMAGE_NAME}:${REV}"
+  docker push "${REPOSITORY}/${CONTAINER}"
+  docker push "${REPOSITORY}/${IMAGE_NAME}:${REV}"
 }
 
 _test() {
