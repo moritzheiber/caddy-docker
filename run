@@ -1,13 +1,33 @@
 #!/bin/bash
 
-IMAGE_NAME="caddy-docker"
+set -Eeu -o pipefail
+
+IMAGE_NAME="caddy"
+REPOSITORY="docker.pkg.github.com/moritzheiber/caddy-docker"
+GIT_BRANCH=$(git branch --show-current)
+TARGET="latest"
+REV=$(git rev-parse --short HEAD)
+
+if ! [ "${GIT_BRANCH}" == "main" ] ; then
+  TARGET="${GIT_BRANCH}"
+fi
+
+CONTAINER="${IMAGE_NAME}:${TARGET}"
 
 _ensure_bundle() {
-  bundle install --path vendor/bundle
+  bundle install
 }
 
 build() {
-  docker build -t "${IMAGE_NAME}" .
+  docker build -t "${CONTAINER}" .
+
+  docker tag "${CONTAINER}" "${REPOSITORY}/${CONTAINER}"
+  docker tag "${CONTAINER}" "${REPOSITORY}/${IMAGE_NAME}:${REV}"
+}
+
+push() {
+  docker push "${CONTAINER}" "${REPOSITORY}/${CONTAINER}"
+  docker push "${CONTAINER}" "${REPOSITORY}/${IMAGE_NAME}:${REV}"
 }
 
 _test() {

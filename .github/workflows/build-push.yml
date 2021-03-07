@@ -1,0 +1,25 @@
+name: build-push
+on:
+  push:
+    branches:
+      - main
+      - v2
+    tags-ignore:
+      - "*"
+
+jobs:
+  test:
+    if: "!contains(github.event.commits[0].message, '[ci skip]')"
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: test
+        run: ./run build
+      - name: test
+        run: ./run test
+      - name: build-push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo ${GITHUB_TOKEN} | docker login https://docker.pkg.github.com -u ${GITHUB_ACTOR} --password-stdin
+          ./run push

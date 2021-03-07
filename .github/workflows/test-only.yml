@@ -1,0 +1,10 @@
+name: test-only
+on: pull_request
+
+jobs:
+  test:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: test
+        run: ./run test
