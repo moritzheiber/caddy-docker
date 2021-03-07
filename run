@@ -3,7 +3,7 @@
 set -Eeu -o pipefail
 
 IMAGE_NAME="caddy"
-REPOSITORY="ghcr.io/moritzheiber/caddy"
+REPOSITORY="ghcr.io/moritzheiber"
 GIT_BRANCH=$(git branch --show-current)
 TARGET="latest"
 REV=$(git rev-parse --short HEAD)
