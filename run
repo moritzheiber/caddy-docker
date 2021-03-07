@@ -37,7 +37,8 @@ _test() {
 }
 
 usage() {
-  echo "Usage ${0} build | test"
+  echo "Usage ${0} build | test | push"
+  exit 1
 }
 
 CMD=${1:-}
@@ -45,5 +46,6 @@ shift || true
 case ${CMD} in
   build) build ;;
   test) _test ;;
+  push) push ;;
   *) usage ;;
 esac
