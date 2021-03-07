@@ -15,6 +15,7 @@ RUN apk --no-cache add git build-base && \
 
 FROM moritzheiber/alpine-base:latest
 LABEL maintainer="Moritz Heiber <hello@heiber.im>"
+LABEL org.opencontainers.image.source=https://github.com/moritzheiber/caddy-docker
 
 ENV CADDY_HOME="/caddy" \
   CADDYPATH="${CADDY_HOME}/certificates"

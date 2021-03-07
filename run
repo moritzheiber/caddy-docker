@@ -3,7 +3,7 @@
 set -Eeu -o pipefail
 
 IMAGE_NAME="caddy"
-REPOSITORY="docker.pkg.github.com/moritzheiber/caddy-docker"
+REPOSITORY="ghcr.io/moritzheiber/caddy"
 GIT_BRANCH=$(git branch --show-current)
 TARGET="latest"
 REV=$(git rev-parse --short HEAD)
