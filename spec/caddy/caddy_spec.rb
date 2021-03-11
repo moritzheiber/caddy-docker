@@ -2,30 +2,10 @@
 
 require 'spec_helper'
 
-module Helpers
-  def compose
-    @compose ||= Docker::Compose.new
-  end
-end
-
-RSpec.configure do |c|
-  c.include Helpers
-  c.extend Helpers
-end
-
 describe 'caddy Docker container', :extend_helpers do
   set :os, family: :alpine
   set :backend, :docker
-  set :docker_container, 'caddy'
-
-  before(:all) do
-    compose.up('caddy', detached: true)
-  end
-
-  after(:all) do
-    compose.kill
-    compose.rm(force: true, volumes: true)
-  end
+  set :docker_image, ENV['CONTAINER']
 
   describe user('caddy') do
     it { is_expected.to exist }
@@ -35,17 +15,16 @@ describe 'caddy Docker container', :extend_helpers do
   describe process('caddy') do
     it { is_expected.to be_running }
     its(:user) { is_expected.to eq 'caddy' }
-    its(:args) { is_expected.to match(/public/) }
+    its(:args) { is_expected.to match(/run/) }
   end
 
-  describe command('caddy -plugins') do
-    its(:stdout) { is_expected.to match(/tls\.dns\.route53/) }
-    its(:stdout) { is_expected.to match(/http\.webdav/) }
+  describe command('caddy list-modules') do
+    its(:stdout) { is_expected.to match(/dns\.providers\.route53/) }
   end
 
   describe 'the webserver' do
-    it 'is available at port 80' do
-      wait_for(port(80)).to be_listening.with('tcp')
+    it 'is available at port 2019' do
+      wait_for(port(2019)).to be_listening.with('tcp')
     end
   end
 end

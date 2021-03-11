@@ -1,17 +1,11 @@
-FROM golang:1.13.0-alpine3.10 as builder
+ARG CADDY_VERSION="2.3.0"
 
-ARG CADDY_VERSION="v1.0.4"
-ARG GO111MODULE="on"
+FROM caddy:${CADDY_VERSION}-builder-alpine as builder
 
-ADD main.go /go/src/caddy-build/main.go
-WORKDIR /go/src/caddy-build
+ARG DNS_PLUGIN_VERSION="1.1.1"
 
-RUN apk --no-cache add git build-base && \
-  go mod init caddy && \
-  go get -v github.com/caddyserver/caddy@${CADDY_VERSION} && \
-  echo "Building ..." && \
-  echo "replace github.com/h2non/gock => gopkg.in/h2non/gock.v1 v1.0.14" >> go.mod && \
-  go build
+RUN xcaddy build \
+    --with github.com/caddy-dns/route53@v${DNS_PLUGIN_VERSION}
 
 FROM moritzheiber/alpine-base:latest
 LABEL maintainer="Moritz Heiber <hello@heiber.im>"
@@ -20,7 +14,7 @@ LABEL org.opencontainers.image.source=https://github.com/moritzheiber/caddy-dock
 ENV CADDY_HOME="/caddy" \
   CADDYPATH="${CADDY_HOME}/certificates"
 
-COPY --from=builder /go/src/caddy-build/caddy /usr/bin/
+COPY --from=builder /usr/bin/caddy /usr/bin/caddy
 
 RUN apk --no-cache add ca-certificates libcap-ng-utils && \
   filecap /usr/bin/caddy net_bind_service && \
@@ -29,9 +23,9 @@ RUN apk --no-cache add ca-certificates libcap-ng-utils && \
   install -d -m0755 -o caddy -g caddy ${CADDYPATH} ${CADDY_HOME}/public && \
   apk --no-cache del --purge libcap-ng libcap-ng-utils
 
-EXPOSE 80 443 2015
+EXPOSE 80 443 2019
 VOLUME ${CADDYPATH}
 WORKDIR /caddy
 USER caddy
 
-CMD ["caddy","-root","public"]
+CMD ["caddy","run"]
