@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -Eeux -o pipefail
+set -Eeu -o pipefail
 
 IMAGE_NAME="caddy"
 REPOSITORY="ghcr.io/moritzheiber"
@@ -9,7 +9,7 @@ TARGET="latest"
 REV=$(git rev-parse --short HEAD)
 
 if ! [ "${GIT_BRANCH}" == "main" ]; then
-  TARGET="${GIT_BRANCH}"
+  TARGET="${GIT_BRANCH:-${REV}}"
 fi
 
 CONTAINER="${IMAGE_NAME}:${TARGET}"
