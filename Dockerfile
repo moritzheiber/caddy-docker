@@ -13,7 +13,7 @@ RUN apk --no-cache add git build-base && \
   echo "replace github.com/h2non/gock => gopkg.in/h2non/gock.v1 v1.0.14" >> go.mod && \
   go build
 
-FROM moritzheiber/alpine-base:latest
+FROM ghcr.io/moritzheiber/alpine:latest
 LABEL maintainer="Moritz Heiber <hello@heiber.im>"
 LABEL org.opencontainers.image.source=https://github.com/moritzheiber/caddy-docker
 
