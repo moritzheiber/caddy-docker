@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -Eeu -o pipefail
+set -Eeux -o pipefail
 
 IMAGE_NAME="caddy"
 REPOSITORY="ghcr.io/moritzheiber"
@@ -8,7 +8,7 @@ GIT_BRANCH=$(git branch --show-current)
 TARGET="latest"
 REV=$(git rev-parse --short HEAD)
 
-if ! [ "${GIT_BRANCH}" == "main" ] ; then
+if ! [ "${GIT_BRANCH}" == "main" ]; then
   TARGET="${GIT_BRANCH}"
 fi
 
@@ -44,8 +44,8 @@ usage() {
 CMD=${1:-}
 shift || true
 case ${CMD} in
-  build) build ;;
-  test) _test ;;
-  push) push ;;
-  *) usage ;;
+build) build ;;
+test) _test ;;
+push) push ;;
+*) usage ;;
 esac
