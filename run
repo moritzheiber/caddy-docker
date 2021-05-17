@@ -8,14 +8,15 @@ GIT_BRANCH=$(git branch --show-current)
 TARGET="latest"
 REV=$(git rev-parse --short HEAD)
 
-if ! [ "${GIT_BRANCH}" == "main" ] ; then
-  TARGET="${GIT_BRANCH}"
+if ! [ "${GIT_BRANCH}" == "main" ]; then
+  TARGET="${GIT_BRANCH:-${REV}}"
 fi
 
 CONTAINER="${IMAGE_NAME}:${TARGET}"
 export CONTAINER
 
 _ensure_bundle() {
+  bundle config set --local path vendor/bundle
   bundle install
 }
 
@@ -33,7 +34,6 @@ push() {
 
 _test() {
   _ensure_bundle
-
   bundle exec rspec
 }
 
@@ -45,8 +45,8 @@ usage() {
 CMD=${1:-}
 shift || true
 case ${CMD} in
-  build) build ;;
-  test) _test ;;
-  push) push ;;
-  *) usage ;;
+build) build ;;
+test) _test ;;
+push) push ;;
+*) usage ;;
 esac

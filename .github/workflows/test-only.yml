@@ -6,5 +6,9 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
+      - name: install-deps
+        run: sudo apt update && sudo apt install -y ruby-bundler
+      - name: build
+        run: ./run build
       - name: test
         run: ./run test

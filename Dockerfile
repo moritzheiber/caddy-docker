@@ -5,9 +5,9 @@ FROM caddy:${CADDY_VERSION}-builder-alpine as builder
 ARG DNS_PLUGIN_VERSION="1.1.1"
 
 RUN xcaddy build \
-    --with github.com/caddy-dns/route53@v${DNS_PLUGIN_VERSION}
+  --with github.com/caddy-dns/route53@v${DNS_PLUGIN_VERSION}
 
-FROM moritzheiber/alpine-base:latest
+FROM ghcr.io/moritzheiber/alpine:latest
 LABEL maintainer="Moritz Heiber <hello@heiber.im>"
 LABEL org.opencontainers.image.source=https://github.com/moritzheiber/caddy-docker
 
