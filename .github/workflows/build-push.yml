@@ -6,6 +6,8 @@ on:
       - v2
     tags-ignore:
       - "*"
+  repository_dispatch:
+    types: [container_updated]
 
 jobs:
   build-test-push:
