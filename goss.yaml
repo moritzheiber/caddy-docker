@@ -1,0 +1,53 @@
+file:
+  /etc/os-release:
+    exists: true
+    contains:
+      - "alpine"
+  /usr/bin/caddy:
+    exists: true
+    mode: "0755"
+    owner: "root"
+    group: "root"
+    filetype: "file"
+  /caddy/certificates:
+    exists: true
+    owner: "caddy"
+    group: "caddy"
+    filetype: "directory"
+    mode: "0700"
+  /caddy/public:
+    exists: true
+    owner: "caddy"
+    group: "caddy"
+    filetype: "directory"
+    mode: "0700"
+command:
+  list-modules:
+    exit-status: 0
+    exec: "caddy list-modules"
+    stdout:
+      - "dns.providers.route53"
+user:
+  caddy:
+    exists: true
+    groups:
+      - caddy
+    home: /caddy
+    shell: /bin/bash
+    uid: 100
+    gid: 101
+process:
+  caddy:
+    running: true
+    skip: false
+port:
+  tcp:2019:
+    listening: true
+    ip:
+      - 127.0.0.1
+    skip: false
+package:
+  libcap-ng:
+    installed: false
+  libcap-ng-utils:
+    installed: false
