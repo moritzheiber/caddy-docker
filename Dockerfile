@@ -11,21 +11,17 @@ FROM ghcr.io/moritzheiber/alpine:latest
 LABEL maintainer="Moritz Heiber <hello@heiber.im>"
 LABEL org.opencontainers.image.source=https://github.com/moritzheiber/caddy-docker
 
-ENV CADDY_HOME="/caddy"
-ENV CADDYPATH="${CADDY_HOME}/certificates"
-
 COPY --from=builder /usr/bin/caddy /usr/bin/caddy
 
 RUN apk --no-cache add ca-certificates libcap-ng-utils && \
   filecap /usr/bin/caddy net_bind_service && \
   addgroup -S caddy && \
-  adduser -h ${CADDY_HOME} -G caddy -s /bin/bash -SD caddy && \
-  install -d -m0700 -o caddy -g caddy ${CADDYPATH} && \
-  install -d -m0700 -o caddy -g caddy ${CADDY_HOME}/public && \
+  adduser -h /caddy -G caddy -s /bin/bash -SD caddy && \
+  install -d -m0700 -o caddy -g caddy /caddy/data && \
   apk --no-cache del --purge libcap-ng libcap-ng-utils
 
 EXPOSE 80 443 2019
-VOLUME ${CADDYPATH}
+VOLUME /caddy/data
 WORKDIR /caddy
 USER caddy
 

@@ -9,13 +9,7 @@ file:
     owner: "root"
     group: "root"
     filetype: "file"
-  /caddy/certificates:
-    exists: true
-    owner: "caddy"
-    group: "caddy"
-    filetype: "directory"
-    mode: "0700"
-  /caddy/public:
+  /caddy/data:
     exists: true
     owner: "caddy"
     group: "caddy"
