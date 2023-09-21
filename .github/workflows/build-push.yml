@@ -20,7 +20,7 @@ jobs:
       - uses: e1himself/goss-installation-action@v1.1.0
         name: Install goss/dgoss
       - name: Login to GHCR
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
