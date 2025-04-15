@@ -1,5 +1,7 @@
 name: build-push
 on:
+  repository_dispatch:
+    types: [container_updated]
   push:
     branches:
       - v2

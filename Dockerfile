@@ -1,8 +1,8 @@
-ARG CADDY_VERSION="2.7.4"
+ARG CADDY_VERSION="2.9.1"
 
-FROM caddy:${CADDY_VERSION}-builder-alpine as builder
+FROM caddy:${CADDY_VERSION}-builder-alpine AS builder
 
-ARG DNS_PLUGIN_VERSION="1.3.3"
+ARG DNS_PLUGIN_VERSION="1.5.0"
 
 RUN xcaddy build \
   --with github.com/caddy-dns/route53@v${DNS_PLUGIN_VERSION}
