@@ -28,7 +28,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and export to Docker
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           push: false
           load: true
@@ -37,7 +37,7 @@ jobs:
         run: dgoss run -ti caddy:v2
       - name: Build and push
         if: github.ref == 'refs/heads/v2'
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           push: true
           tags: "ghcr.io/moritzheiber/caddy:v2"
